@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Search System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Contact Search System</h1>
+    </header>
+    <main>
+        <section>
+            <form id="search-form">
+                <label for="search-input">Qidirish:</label>
+                <input type="text" id="search-input" placeholder="Ism yoki familiya kiriting">
+                <button type="submit">Qidirish</button>
+            </form>
+            <div id="search-results"></div>
+        </section>
+        <section>
+            <h2>Kontaktlar ro'yxati</h2>
+            <ul id="contact-list">
+                <li><span>Ism:</span> <span>Familiya:</span> <span>Telefon:</span></li>
+            </ul>
+        </section>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
+
+<div id="contact-modal" style="display:none;">
+    <h2>Kontakt ma'lumotlari</h2>
+    <p id="contact-name"></p>
+    <p id="contact-surname"></p>
+    <p id="contact-phone"></p>
+    <button id="close-modal">Yopish</button>
+</div>
+
+<script>
+    const searchForm = document.getElementById('search-form');
+    const searchInput = document.getElementById('search-input');
+    const searchResults = document.getElementById('search-results');
+    const contactList = document.getElementById('contact-list');
+    const contactModal = document.getElementById('contact-modal');
+    const closeModalBtn = document.getElementById('close-modal');
+    const contactName = document.getElementById('contact-name');
+    const contactSurname = document.getElementById('contact-surname');
+    const contactPhone = document.getElementById('contact-phone');
+
+    let contacts = [
+        {name: 'Ali', surname: 'Aliyev', phone: '123456789'},
+        {name: 'Vali', surname: 'Valiyev', phone: '987654321'},
+        {name: 'Jamal', surname: 'Jamaliyev', phone: '555555555'},
+    ];
+
+    searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const searchQuery = searchInput.value.toLowerCase();
+        const filteredContacts = contacts.filter((contact) => {
+            return contact.name.toLowerCase().includes(searchQuery) || contact.surname.toLowerCase().includes(searchQuery);
+        });
+        searchResults.innerHTML = '';
+        filteredContacts.forEach((contact) => {
+            const li = document.createElement('li');
+            li.textContent = `${contact.name} ${contact.surname} ${contact.phone}`;
+            searchResults.appendChild(li);
+        });
+    });
+
+    contactList.addEventListener('click', (e) => {
+        if (e.target.tagName === 'LI') {
+            const contact = contacts.find((contact) => {
+                return contact.name === e.target.textContent.split(' ')[0] && contact.surname === e.target.textContent.split(' ')[1];
+            });
+            contactName.textContent = contact.name;
+            contactSurname.textContent = contact.surname;
+            contactPhone.textContent = contact.phone;
+            contactModal.style.display = 'block';
+        }
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        contactModal.style.display = 'none';
+    });
+</script>
